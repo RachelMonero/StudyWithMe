@@ -209,7 +209,7 @@ public static String whatsGroupId(String groupName) {
 return groupId;
 }
 
-//new : try to find groupName - it is used for Chat.java and chat.jsp
+
 public static String whatsGroupName(String groupId) {
 	
 	String groupName = null;
@@ -238,7 +238,6 @@ public static String whatsGroupName(String groupId) {
 
 return groupName;
 }
-
 
 
 }

@@ -33,12 +33,12 @@
             <a class="profile" href="profile.jsp">Profile</a>
             <a class="post" href="post.jsp">Post</a>
             <a class="post" href="mygroup.jsp">MyGroup</a>
+            <a class="post" href="groupsearch.jsp">GroupSearch</a> 
             <a class="signout" href="landing.html">Signout</a>
             
         </div>
     </form>
 
- 
 
   <%
 try {
@@ -49,6 +49,8 @@ try {
 %>
 
 <form action="join" method="post">
+
+
     <input type="submit" value="Join a Group" id="joinGroup">
     
     <table>
@@ -72,7 +74,7 @@ try {
             <td><input type="radio" name="groupName" value="<%= groupName %>" id="<%= groupName %>"></td>
             <td><%= groupName %></td>
             <td><%= resultSet.getString("subject") %></td>
-            <td><%= resultSet.getString("meetupDate") %></td>
+            <td><%= resultSet.getDate("meetupDate") %></td>
             <td><%= resultSet.getString("location") %></td>
             <td><%= resultSet.getString("duration") %></td>
             <td><%= resultSet.getInt("maxMember") %></td>

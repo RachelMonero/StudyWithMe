@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.UUID;
 
 import javax.servlet.RequestDispatcher;
@@ -41,6 +42,64 @@ public class GroupManageServlet extends HttpServlet {
         }
     }
     
+    private void removeAllChat(Connection connection, String groupId) {
+        String removeAllChatSQL = "DELETE FROM chats WHERE groupId=?";
+        
+        try (PreparedStatement pStatement = connection.prepareStatement(removeAllChatSQL)) {
+            pStatement.setString(1,groupId); 
+            pStatement.execute();
+        } catch (Exception e) {
+            e.printStackTrace();  
+        }
+    } 
+  //new. Nov16 --- find admin Id
+    public static int whatsAdminId(Connection connection, String groupName) {
+    	
+    	int adminId = 0;
+    		
+    		
+    		try {
+    			
+   		        String getAdminIdSql ="SELECT adminId FROM study_group WHERE groupName=?;";
+    			PreparedStatement pStatement = connection.prepareStatement(getAdminIdSql);
+    			pStatement.setString(1,groupName);
+    			
+    			ResultSet rs = pStatement.executeQuery();
+    			
+    			if (rs.next()) {
+    	            
+    	            adminId = rs.getInt("adminId");
+    	        }
+    	       
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	    }
+    		
+    return adminId;
+    }
+    
+    private void removeAllMembers(Connection connection, String groupId) {
+        String removeAllMembersSQL = "DELETE FROM group_member WHERE groupId=?";
+        
+        try (PreparedStatement pStatement = connection.prepareStatement(removeAllMembersSQL)) {
+            pStatement.setString(1,groupId); 
+            pStatement.execute();
+        } catch (Exception e) {
+            e.printStackTrace();  
+        }
+    } 
+    
+    private void removeGroup(Connection connection, String groupId) {
+        String removeGroupSql = "DELETE FROM study_group WHERE groupId=?";
+        
+        try (PreparedStatement pStatement = connection.prepareStatement(removeGroupSql)) {
+            pStatement.setString(1,groupId);        
+            pStatement.execute();
+            
+        } catch (Exception e) {
+            e.printStackTrace();  
+        }
+    }
     
     
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -65,21 +124,42 @@ public class GroupManageServlet extends HttpServlet {
 	    	
 	    	  
 	    	for(String groupName : selectedGroupNames) {
+	    		
 	    		String groupId = Search.whatsGroupId(groupName);
 	    		
-	    		removeMember(connection, groupId, userId);
-	    		RequestDispatcher rd = request.getRequestDispatcher("mygroup.jsp"); 
-				rd.include(request, response);
+	    		System.out.println(groupId);
+	    		//find adminId in each group
+	    		int adminId = whatsAdminId(connection,groupName);
 	    		
-	    	} 
+	    		if ( adminId != userId) {   
+	    			
+	    			removeMember(connection, groupId, userId);
+		    		
+					
+	    		} else {  
+   			
+	    			    System.out.println(adminId);
+	  		    	
+	    		    	removeAllMembers(connection,groupId);
+	    		    	
+	    		    	removeAllChat(connection,groupId);
+	    		        
+	    		    	removeGroup(connection,groupId);
+
+	    			    		
+	    	      } 
 	    	
-	    	} else {
+	    	  } RequestDispatcher rd = request.getRequestDispatcher("mygroup.jsp"); 
+				rd.include(request, response);
+				
+	    	}else {
 	    		pw.print("Please select the group.");
 	    		
-	    	}
-	    } catch(Exception e) {System.out.println(e);
+	         }
+	    } catch(Exception e) {
+	    	System.out.println(e);
 	    
-	} pw.close();
+	    } pw.close();
 	
 }
 }
