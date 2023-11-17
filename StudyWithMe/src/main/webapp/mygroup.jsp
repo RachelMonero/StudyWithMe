@@ -1,19 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.Connection,java.sql.DriverManager,javax.servlet.http.HttpSession,java.sql.ResultSet,java.sql.PreparedStatement,application.dao.Search" %>
+<%@ page import="java.sql.Connection,java.sql.DriverManager,javax.servlet.http.HttpSession,java.sql.ResultSet,java.sql.PreparedStatement,application.dao.Search, application.connection.DBConnection" %>
 <%
-    String driverName = "com.mysql.jdbc.Driver";
-    String connectionUrl = "jdbc:mysql://localhost:3306/study_with_me";
-    String dbUser = "cst8288";
-    String dbPassword = "8288";
-   
-
-    try {
-        Class.forName(driverName);
-    } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-    }
-
-    Connection connection = null;
+    
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
     
@@ -64,15 +52,13 @@
 
             <%
             try {
-                connection = DriverManager.getConnection(connectionUrl, dbUser, dbPassword);
-                
-            	
-                
+            	 Class.forName("com.mysql.jdbc.Driver");
+            	 Connection connection = DBConnection.getConnectionToDatabase();
 
-                String myGroupSql = "SELECT sg.groupId, sg.groupName, sg.subject, sg.meetupDate, sg.location, sg.duration, sg.maxMember, sg.genderPref, sg.description FROM user AS u JOIN group_member AS gm ON u.userId = gm.userId JOIN study_group AS sg ON gm.groupId = sg.groupId WHERE u.email = ?";
-                preparedStatement  = connection.prepareStatement(myGroupSql);
-                preparedStatement.setString(1,email);
-                resultSet = preparedStatement.executeQuery();
+                 String myGroupSql = "SELECT sg.groupId, sg.groupName, sg.subject, sg.meetupDate, sg.location, sg.duration, sg.maxMember, sg.genderPref, sg.description FROM user AS u JOIN group_member AS gm ON u.userId = gm.userId JOIN study_group AS sg ON gm.groupId = sg.groupId WHERE u.email = ?";
+                 preparedStatement  = connection.prepareStatement(myGroupSql);
+                 preparedStatement.setString(1,email);
+                 resultSet = preparedStatement.executeQuery();
             %>
 
             <%
@@ -103,7 +89,7 @@
             } finally {
                 if (resultSet != null) resultSet.close();
                 if (preparedStatement != null) preparedStatement.close();
-                if (connection != null) connection.close();
+                
             }
             %>
         </table>

@@ -1,19 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.Connection,java.sql.DriverManager,javax.servlet.http.HttpSession,java.sql.ResultSet,java.sql.PreparedStatement,application.dao.Search,application.dao.Validate" %>
+<%@ page import="java.sql.Connection,java.sql.DriverManager,javax.servlet.http.HttpSession,java.sql.ResultSet,java.sql.PreparedStatement,application.dao.Search,application.dao.Validate, application.connection.DBConnection" %>
 <%
-    String driverName = "com.mysql.jdbc.Driver";
-    String connectionUrl = "jdbc:mysql://localhost:3306/study_with_me";
-    String dbUser = "cst8288";
-    String dbPassword = "8288";
-   
 
-    try {
-        Class.forName(driverName);
-    } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-    }
-
-    Connection connection = null;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
     
@@ -51,7 +39,8 @@
         <table>
             <%
             try {
-                connection = DriverManager.getConnection(connectionUrl, dbUser, dbPassword);
+            	Class.forName("com.mysql.jdbc.Driver");
+           	    Connection connection = DBConnection.getConnectionToDatabase();
 
                 String myProfileSql = "SELECT * FROM user WHERE email= ?";
                 preparedStatement = connection.prepareStatement(myProfileSql);
@@ -135,7 +124,7 @@
             } finally {
                 if (resultSet != null) resultSet.close();
                 if (preparedStatement != null) preparedStatement.close();
-                if (connection != null) connection.close();
+                
             }
             %>
         </table>

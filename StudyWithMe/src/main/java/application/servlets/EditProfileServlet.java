@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +24,7 @@ public class EditProfileServlet extends HttpServlet {
    
     public EditProfileServlet() {
         super();
-        // TODO Auto-generated constructor stub
+      
     }
 
 	
@@ -72,9 +73,13 @@ public class EditProfileServlet extends HttpServlet {
             
             
             preparedStatement.executeUpdate();
-            System.out.println("Profile has updated");
+            pw.print("Profile has updated");
+            
+            // display update message 
+            RequestDispatcher rd = request.getRequestDispatcher("profile.jsp"); //changed to jsp
+		    rd.include(request, response);
 
-            response.sendRedirect("profile.jsp");
+           
         } catch (Exception e) {
 
             e.printStackTrace();

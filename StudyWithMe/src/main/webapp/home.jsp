@@ -1,18 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.Connection,java.sql.DriverManager,java.sql.ResultSet,java.sql.Statement" %>
+<%@ page import="java.sql.Connection,java.sql.DriverManager,java.sql.ResultSet,java.sql.Statement, application.connection.DBConnection" %>
 <%
-    String driverName = "com.mysql.jdbc.Driver";
-    String connectionUrl = "jdbc:mysql://localhost:3306/study_with_me";
-    String dbUser = "cst8288";
-    String dbPassword = "8288";
-
-    try {
-        Class.forName(driverName);
-    } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-    }
-
-    Connection connection = null;
+   
     Statement statement = null;
     ResultSet resultSet = null;
 %>
@@ -42,10 +31,14 @@
 
   <%
 try {
-    connection = DriverManager.getConnection(connectionUrl, dbUser, dbPassword);
-    statement = connection.createStatement();
-    String sql = "Select * from study_group";
-    resultSet = statement.executeQuery(sql);
+	
+	 Class.forName("com.mysql.jdbc.Driver");
+	 Connection connection = DBConnection.getConnectionToDatabase();
+
+     String sql = "Select * from study_group";
+     statement = connection.createStatement();
+    
+     resultSet = statement.executeQuery(sql);
 %>
 
 <form action="join" method="post">
