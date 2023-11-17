@@ -12,12 +12,7 @@ import application.connection.DBConnection;
 
 public class Search {
 
-	
-	
-	
-	
-	
-	// new this function is to find username by login email address.
+
 	public static String whatsUsername(String email) {
 		
 		String username = null;
@@ -120,7 +115,34 @@ public static int findSchoolId(String schoolname, String schooltype) {
 		return schoolId;
 	
 }
-
+/// new.Nov 17 --- get schoolname by schoolId
+public static String findSchoolName(int schoolId) {
+	
+	String schoolName = null;
+		
+		
+		try {
+			 Class.forName("com.mysql.jdbc.Driver");
+			 Connection connection = DBConnection.getConnectionToDatabase();
+			
+			String getSchoolIdSql ="SELECT schoolName FROM school WHERE schoolId = ?";
+			PreparedStatement pStatement = connection.prepareStatement(getSchoolIdSql);
+			pStatement.setInt(1,schoolId);
+			
+			
+			ResultSet rs = pStatement.executeQuery();
+			
+			if (rs.next()) {
+	            
+	            schoolName = rs.getString("schoolName");
+	        }
+	       
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+		return schoolName;
+	
+}
 
 public static int findCourseId(int schoolId, String coursename) {
 	
@@ -190,18 +212,18 @@ public static String whatsGroupId(String groupName) {
 			 Connection connection = DBConnection.getConnectionToDatabase();
 			
 			 String getGroupIdSql ="SELECT groupId FROM study_group WHERE groupName=?;";
-			PreparedStatement pStatement = connection.prepareStatement(getGroupIdSql);
-			pStatement.setString(1,groupName);
+			 PreparedStatement pStatement = connection.prepareStatement(getGroupIdSql);
+			 pStatement.setString(1,groupName);
 			
-			ResultSet rs = pStatement.executeQuery();
+			 ResultSet rs = pStatement.executeQuery();
 			
-			if (rs.next()) {
+			 if (rs.next()) {
 	            
 	            groupId = rs.getString("groupId");
-	        }
+	         }
 	       
-	    } catch (Exception e) {
-	        e.printStackTrace();
+	       } catch (Exception e) {
+	          e.printStackTrace();
 	    }
 		
 	

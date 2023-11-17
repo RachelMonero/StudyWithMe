@@ -34,7 +34,7 @@ public class SignInServlet extends HttpServlet {
         super();
         
     }
-    // new.from here ---- prohibit non-verified user signin
+   
     private int getUserStatus(Connection connection, String email) {
         int userStatus = -1;
 
@@ -52,7 +52,29 @@ public class SignInServlet extends HttpServlet {
 
         return userStatus;
     }
-    //new. to here ----
+    
+   
+    
+    //new. Nov 17 ---from here-- bring schoolId
+    private int getSchoolId(Connection connection, String email) {
+        int schoolId = -1;
+
+        String getlschoolIdSql = "SELECT schoolId FROM user WHERE email = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(getlschoolIdSql)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                	schoolId = resultSet.getInt("schoolId");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return schoolId;
+    }
+    
+    //new.Nov 17 ---- to here
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		response.setContentType("text/html;charset=UTF-8");
@@ -61,7 +83,7 @@ public class SignInServlet extends HttpServlet {
 		String email = (request.getParameter("signin-email").toLowerCase());
 	    String password = request.getParameter("password");
 
-	 // new.from here ---- prohibit non-verified user signin
+	 
 	    try {
 		     Class.forName("com.mysql.jdbc.Driver");
 		     Connection connection = DBConnection.getConnectionToDatabase();
@@ -69,7 +91,9 @@ public class SignInServlet extends HttpServlet {
 		    int isVerifiedUser = getUserStatus(connection,email);
 		    
 		    System.out.println("isVerifiedUser:"+isVerifiedUser);
-		    
+		    /// new. nov 17 ---find schoolId from user
+		    int schoolId = getSchoolId(connection,email);
+		    System.out.println("schoolId:"+schoolId);
 		    
 		    if(isVerifiedUser==1) {
 		    	System.out.println("isVerifiedUser:"+isVerifiedUser);
@@ -79,7 +103,10 @@ public class SignInServlet extends HttpServlet {
             	
             	HttpSession session= request.getSession();
     
-            	session.setAttribute("email", email);// new setting the email
+            	session.setAttribute("email", email);
+            	
+            	session.setAttribute("schoolId",schoolId); ///new.nov 17 ---- set schoolId
+            	
 
             	pw.print("Welcome Back!");      
             	RequestDispatcher rs = request.getRequestDispatcher("home.jsp"); //changed to jsp
@@ -99,7 +126,7 @@ public class SignInServlet extends HttpServlet {
      
      }
 	}
-	 //new. to here ---- 
+	 
 
 	}
 
