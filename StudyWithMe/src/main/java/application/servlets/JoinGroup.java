@@ -105,26 +105,28 @@ public class JoinGroup extends HttpServlet {
 						
 						
 						if(!inTheGroup(userId,groupId)) {
-				  // new = calling addGroupAdmin method.
+				           // new = calling addGroupAdmin method.
 					
-				  addGroupMember(connection,groupId,userId);
+				           addGroupMember(connection,groupId,userId);
 				  
-				  RequestDispatcher rd = request.getRequestDispatcher("home.jsp"); //changed to jsp
-			      rd.include(request, response);
-			      pw.print("Joined");
-			      }else {
-			    	  pw.print("You are a member of this group, already.");  
-			      }
-	 			  
-				  }else {
+				           RequestDispatcher rd = request.getRequestDispatcher("home.jsp"); //changed to jsp
+			               rd.include(request, response);
+			               pw.print("Joined");
+			              } else {
+			    	              pw.print("You are a member of this group, already.");  
+			              }
+				        }else {
 					  
-					  pw.print("Sorry, the group is full.");  
-				  }
+					            pw.print("Sorry, the group is full.");  
+				        }
+				}else{
+					   pw.print("Please select the group you want to join."); 
+				}
 					
 	 		 
-	 			  }
-	       }catch(Exception e2) {System.out.println(e2);
-	       }
+	 			  
+	       } catch(Exception e2) {System.out.println(e2);
+	         }
 	}
 
 }

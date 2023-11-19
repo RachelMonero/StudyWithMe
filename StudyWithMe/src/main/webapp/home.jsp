@@ -51,7 +51,6 @@ try {
 
 
 
-
 <form action="join" method="post">
 
 

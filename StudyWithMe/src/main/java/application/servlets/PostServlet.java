@@ -19,9 +19,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import application.beans.StudyGroup;
 import application.connection.DBConnection;
 import application.dao.Search;
+import application.dao.StudyGroupDAO;
+import application.dao.StudyGroupDAOImp;
 import application.dao.Validate;
+import application.factory.GroupFactory;
+import application.factory.StudyGroupFactory;
+import application.observers.StudyGroupNotification;
+import application.observers.StudyGroupObserver;
 
 /**
  * Servlet implementation class PostServlet
@@ -29,7 +36,9 @@ import application.dao.Validate;
 @WebServlet("/post")
 public class PostServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	private GroupFactory groupFactory = new StudyGroupFactory();// 18Nov 2023 new to instance of concrete subclass
+	private StudyGroupDAO studygpDAO = new StudyGroupDAOImp();
+    private StudyGroupObserver studyGrpObs = new StudyGroupNotification();   
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -89,31 +98,23 @@ public class PostServlet extends HttpServlet {
 			  pw.println("<h4>Sorry, the group name is in use. Please choose other group name.</h4>");  
 		  
 		  }else{
-		
-			  
-			  String createGroupSql = "INSERT INTO study_group (groupId, groupName, subject, meetupDate, location, duration, maxMember, genderPref, description, createdDate,adminId) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-
-		      PreparedStatement pStatement = connection.prepareStatement(createGroupSql);
-		      pStatement.setString(1,groupId);
-			  pStatement.setString(2,groupName);
-			  pStatement.setString(3,subject);
-			  pStatement.setDate(4,(java.sql.Date)meetupDate);
-			  pStatement.setString(5,location);
-			  pStatement.setString(6,duration);
-			  pStatement.setInt(7,maxMember);
-			  pStatement.setString(8,genderPref);
-			  pStatement.setString(9,description);
-			  pStatement.setTimestamp(10,createdDate);
-			 
-			  
+			  // moved this section to the top
 			  HttpSession session = request.getSession();
 			  // changed to email
 			  String email = (String) session.getAttribute("email"); 
-			  int userId = Search.whatsUserId(email);/// use whatsUsername function to find username 			  
-			 
-			  pStatement.setInt(11,userId); // assign username as admin of the group
-			  pStatement.execute();
-			  pw.print("Group has created successfully.");
+			  int userId = Search.whatsUserId(email);/// use whatsUsername function to find username 		
+			// moved this section till here
+			  
+			  // using the factory to create an instance of studygroup and add data to database
+			  StudyGroup newGroup = groupFactory.createGroup(groupId, groupName, subject, meetupDate, location, duration, maxMember, genderPref, description, createdDate, userId);
+			  studygpDAO.studyGroupToDatabase(newGroup);
+			  newGroup.addObserver(studyGrpObs);
+			  newGroup.notifyObserver();
+			  
+			  /* 
+			   * moved to StrudyGroupDAOImp 
+			  // insert Data into database
+			 */ 
 			  
 			  // new = calling addGroupAdmin method.
 			  addGroupAdmin(connection,groupId,userId);

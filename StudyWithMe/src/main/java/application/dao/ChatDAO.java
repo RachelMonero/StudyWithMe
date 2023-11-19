@@ -14,14 +14,23 @@ import java.util.UUID;
 import application.beans.Chat;
 import application.beans.User;
 import application.connection.DBConnection;
+import application.observers.ChatSubject;
 
 // class to obtain the chat logs from the database
 public class ChatDAO {
 	
+	private ChatSubject chatSubject;
+	
+	public void setChatSubject(ChatSubject chatSubject) {
+		this.chatSubject = chatSubject;
+	}
+	
 	public List<Chat> getChatMessages(){
 		
 		List<Chat> chatMessages = new ArrayList<>();
+		
 		try {
+			
 			Connection conn = DBConnection.getConnectionToDatabase();
 			String query = "SELECT * FROM chats";
 			PreparedStatement stmt = conn.prepareStatement(query);
@@ -61,7 +70,7 @@ public class ChatDAO {
 		return chatMessages;	
 	}
 	
-public List<Chat> getChatMessagesForGroup(String groupId){
+	public List<Chat> getChatMessagesForGroup(String groupId){
 		
 		List<Chat> chatMessages = new ArrayList<>();
 		try {
@@ -100,8 +109,7 @@ public List<Chat> getChatMessagesForGroup(String groupId){
 		return chatMessages;	
 	}
 	
-		
-		
+			
 
 	public void addChatMessage(Chat chat) {
 		try {
@@ -120,6 +128,16 @@ public List<Chat> getChatMessagesForGroup(String groupId){
 					stmt.setString(5, chat.getGroupId());
 			
 					stmt.executeUpdate();
+					
+					// new as of 8:50 17nov 2023 
+					String groupName = Search.whatsGroupName(chat.getGroupId());
+					
+					if(chatSubject != null) {
+						chatSubject.notifyObservers(chat,groupName);
+					}else {
+						System.out.println("Chat Subject is null");
+					}
+					// new as of 8:50 17nov 2023 
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -127,5 +145,7 @@ public List<Chat> getChatMessagesForGroup(String groupId){
 		}
 	}
 
+	
+	
 }
 

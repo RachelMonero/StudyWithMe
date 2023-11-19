@@ -12,25 +12,44 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import application.beans.Chat;
 import application.beans.User;
 import application.dao.ChatDAO;
 import application.dao.Search;
+import application.observers.ChatNotifier;
+import application.observers.MyChatUpdate;
 
 
 @WebServlet("/chat")
 public class ChatServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 private List<Chat> chatMessages ;
+private ChatDAO chatDAO;
+private ChatNotifier chatNotifier;
 	
 	/**
-	 * 
-	 */
+	 * @throws ServletException 
+	 * new method to initialize the chat servlet
+	 * contains method to notify the servlet
+	 */	
+	public void init() throws ServletException{
+		super.init();
+		
+		chatNotifier = new ChatNotifier();
+		
+		MyChatUpdate myChatUpdate = new MyChatUpdate();
+		chatNotifier.addObserver(myChatUpdate);
+		
+		chatDAO = new ChatDAO();
+		chatDAO.setChatSubject(chatNotifier);
+		
+	}
 	
-
+	
 	public ChatServlet() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 
@@ -60,8 +79,8 @@ private List<Chat> chatMessages ;
 		session.setAttribute("groupName", groupName);
 		System.out.println("retrived groupname inchat servlet :"+groupName);// to check if correct group name is retrieved
 		
-		ChatDAO chatDao = new ChatDAO();
-		chatMessages = chatDao.getChatMessagesForGroup(groupId);
+		chatDAO = new ChatDAO();
+		chatMessages = chatDAO.getChatMessagesForGroup(groupId);
 		
 		request.setAttribute("group", groupId);
 		request.setAttribute("chatMessages", chatMessages);
@@ -90,7 +109,8 @@ private List<Chat> chatMessages ;
 		//chat.setCreator(user);
 		
 		//create dao object to call the dao methods
-		ChatDAO chatDAO = new ChatDAO();
+		chatDAO = new ChatDAO();
+		chatDAO.setChatSubject(chatNotifier);
 		chatDAO.addChatMessage(chat);
 		
 	
