@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import application.connection.DBConnection;
 import application.dao.Search;
 import application.dao.Validate;
+import application.service.EmailService;
 import application.service.TokenGenerator;
 
 
@@ -95,15 +96,19 @@ public class SignUpServlet extends HttpServlet {
 			  pStatement.execute();
 			  
 			  String vCode = TokenGenerator.generatedToken();
-			  System.out.print(vCode);
-			  
+			   // System.out.print(vCode);-- delete
+			  //new.Nov 19 --- add from here
+			  EmailService emailService = new EmailService();
+			  String container = vCode;
+			  emailService.sendEmail(email, container);
+			  //new.Nov 19 --- add to here
 			  HttpSession session= request.getSession();
           	  session.setAttribute("vCode", vCode);
               session.setAttribute("signupEmail", email); // this email is saved in session for verification purpose.
           	  
 			
 			  RequestDispatcher rd = request.getRequestDispatcher("verification.jsp"); 
-			  // new.to here 10:23 pm 11/14/2023
+			  
 			  
 		      rd.forward(request, response);
 		      		    		      
