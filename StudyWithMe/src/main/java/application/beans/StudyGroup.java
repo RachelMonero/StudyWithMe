@@ -61,8 +61,32 @@ public class StudyGroup {
 	}
 	//new 18nov2023 till here
 
-	public StudyGroup() {
+	public StudyGroup(String groupId, String groupName, String subject, Date meetupDate, String location,
+			String duration, int maxMember, String genderPref, String description) {
 
+		this.groupId = groupId;
+		this.groupName = groupName;
+		this.subject = subject;
+		this.meetupDate = meetupDate;
+		this.location = location;
+		this.duration = duration;
+		this.maxMember = maxMember;
+		this.genderPref = genderPref;
+		this.description = description;
+		
+	}
+	
+
+	public StudyGroup() {
+		this.groupId = groupId;
+		this.groupName = groupName;
+		this.subject = subject;
+		this.meetupDate = meetupDate;
+		this.location = location;
+		this.duration = duration;
+		this.maxMember = maxMember;
+		this.genderPref = genderPref;
+		this.description = description;
 	}
 	
 	//new 18nov2023 

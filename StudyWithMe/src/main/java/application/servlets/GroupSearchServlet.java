@@ -65,16 +65,14 @@ public class GroupSearchServlet extends HttpServlet {
 			  String searchSql = "SELECT * FROM study_group WHERE SUBJECT = ?";
 
 		      PreparedStatement pStatement = connection.prepareStatement(searchSql);
-		      pStatement.setInt(1, 1001);
+		      pStatement.setString(1,subject);
 		      
-		    
-			  
 			  HttpSession session = request.getSession();
 			  // changed to email
 			  String email = (String) session.getAttribute("email"); 
 			  int userId = Search.whatsUserId(email);/// use whatsUsername function to find username 			  
 			 
-			  pStatement.setInt(11,userId); // assign username as admin of the group
+			  
 			  pStatement.execute();
 			  pw.print("ran the search query.");
 			  

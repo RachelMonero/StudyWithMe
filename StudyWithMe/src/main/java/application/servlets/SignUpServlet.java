@@ -95,8 +95,13 @@ public class SignUpServlet extends HttpServlet {
 			  pStatement.setInt(9, 0);
 			  pStatement.execute();
 			  
-			  String vCode = TokenGenerator.generatedToken();
-			   // System.out.print(vCode);-- delete
+			  //added singleton pattern
+			  TokenGenerator tokenGenerator = TokenGenerator.getInstance();
+			  String vCode = tokenGenerator.generatedToken();
+			  System.out.print(vCode);
+			 //added singleton pattern till here 
+			  
+			  // System.out.print(vCode);-- delete
 			  //new.Nov 19 --- add from here
 			  EmailService emailService = new EmailService();
 			  String container = vCode;

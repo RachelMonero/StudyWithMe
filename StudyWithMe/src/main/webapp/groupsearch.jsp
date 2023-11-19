@@ -10,7 +10,7 @@
     <p><b><a id="home" href="http://localhost:8080/StudyWithMe/home.jsp">Back</a></b></p> <%--changed to jsp --%> 
 <h1 id="logo"> Study With Me </h1>
 
-   <form action="post" method="post"> 
+   <form action="groupsearch" method="post"> 
     <h2>Create 'Study With Me' Group</h2>
 
 
