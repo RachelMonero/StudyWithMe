@@ -10,6 +10,10 @@
 <title>Study Group Chats</title>
 </head>
 <body>
+
+    <p><b><a id="home" href="home.jsp">Back</a></b></p> 
+    
+    
 <h2> Chat Messages for Group Name: ${sessionScope.groupName}</h2><br>
 <div class="navibar">
             <a class="home" href="home.jsp">Home</a>

@@ -90,10 +90,9 @@ public class SignInServlet extends HttpServlet {
 
 		    int isVerifiedUser = getUserStatus(connection,email);
 		    
-		    System.out.println("isVerifiedUser:"+isVerifiedUser);
-		    /// new. nov 17 ---find schoolId from user
+		    
 		    int schoolId = getSchoolId(connection,email);
-		    System.out.println("schoolId:"+schoolId);
+		    
 		    
 		    if(isVerifiedUser==1) {
 		    	System.out.println("isVerifiedUser:"+isVerifiedUser);

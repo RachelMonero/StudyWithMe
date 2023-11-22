@@ -16,6 +16,10 @@
     <title>My Group</title>
 </head>
 <body>
+
+    <p><b><a id="home" href="home.jsp">Back</a></b></p> 
+    
+    
      <h1 id="logo"> Study With Me </h1>
 
     <form>
@@ -25,6 +29,7 @@
             <a class="profile" href="profile.jsp">Profile</a>
             <a class="post" href="post.jsp">Post</a>
             <a class="post" href="mygroup.jsp">MyGroup</a>
+            <a class="post" href="groupsearch.jsp">GroupSearch</a> 
             <a class="signout" href="landing.html">Signout</a>
             
         </div>

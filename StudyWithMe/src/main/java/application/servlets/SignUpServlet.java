@@ -52,7 +52,7 @@ public class SignUpServlet extends HttpServlet {
 	       String schoolname = request.getParameter("school");
 	       String schooltype = request.getParameter("school_type");
 	      
-	    // new. 11/15/23 -- removed int schoolId = Search.findSchoolId(schoolname, schooltype);
+	    
 	       String answer = (request.getParameter("answer").toLowerCase());
 	 
 	       
@@ -60,13 +60,13 @@ public class SignUpServlet extends HttpServlet {
 		  Class.forName("com.mysql.jdbc.Driver");
 		  Connection connection = DBConnection.getConnectionToDatabase();
 		  
-		  // new. 11/15/23 -- add 
+		  
 		  if (schoolname != null && !schoolname.isEmpty() && schooltype != null && !schooltype.isEmpty()) {
 			    int schoolId = Search.findSchoolId(schoolname.toLowerCase(), schooltype.toLowerCase());
 
 		  
 		  
-	   // new. 11/15/23 -- remove  schoolname != null &&  schooltype != null 
+	   
 		  if(username!=null && firstname!=null && lastname !=null && email != null && password!=null &&  answer!=null) {
 			  		  
 	
@@ -74,14 +74,14 @@ public class SignUpServlet extends HttpServlet {
 			  pw.println("<h4>Sorry, username is invalid. Please choose other username.</h4>");  
 		  }else if(Validate.findEmail(email)) {
 			  pw.print("<h4>Sorry, this email address is already in use.</h4>"); 
-		// new.from here 11/15/23 --add if statement 	  
+			  
 		  } else if(schoolId==0) {
 			  pw.print("<h4>Sorry, our services are currently not available for your school.</h4>");
-		//	new. to here 11/15/23 
+		
 			  
 		  } else{
 		
-			// new.from here  10:23 pm 11/14/2023
+			
 			  String signUpSql = "insert into user values(?,?,?,?,?,?,?,?,?)";
 		      PreparedStatement pStatement = connection.prepareStatement(signUpSql);
 		      pStatement.setString(1,null);
@@ -98,15 +98,14 @@ public class SignUpServlet extends HttpServlet {
 			  //added singleton pattern
 			  TokenGenerator tokenGenerator = TokenGenerator.getInstance();
 			  String vCode = tokenGenerator.generatedToken();
-			  System.out.print(vCode);
+			  
 			 //added singleton pattern till here 
 			  
-			  // System.out.print(vCode);-- delete
-			  //new.Nov 19 --- add from here
+			  
 			  EmailService emailService = new EmailService();
 			  String container = vCode;
 			  emailService.sendEmail(email, container);
-			  //new.Nov 19 --- add to here
+			  
 			  HttpSession session= request.getSession();
           	  session.setAttribute("vCode", vCode);
               session.setAttribute("signupEmail", email); // this email is saved in session for verification purpose.

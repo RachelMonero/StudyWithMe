@@ -182,7 +182,7 @@ public static int whatsUserId(String email) {
 			 Class.forName("com.mysql.jdbc.Driver");
 			 Connection connection = DBConnection.getConnectionToDatabase();
 			
-			 String getUserIdSql ="SELECT userId FROM user WHERE email=?;";
+			 String getUserIdSql ="SELECT userId FROM user WHERE email=?";
 			PreparedStatement pStatement = connection.prepareStatement(getUserIdSql);
 			pStatement.setString(1,email);
 			

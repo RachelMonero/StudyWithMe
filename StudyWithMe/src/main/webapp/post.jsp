@@ -8,19 +8,26 @@
 </head>
 <body>
 	<p><b><a id="home" href="http://localhost:8080/StudyWithMe/home.jsp">Back</a></b></p> <%--changed to jsp --%> 
-<h1 id="logo"> Study With Me </h1>
-      <form >
-  <div class="navibar">
-  <a class="home" href="home.jsp">Home</a>
-  <a class="profile" href="profile.jsp">Profile</a>
-  <a class="post" href="post.jsp">Post</a>
-   <a class="post" href="mygroup.jsp">MyGroup</a>
-  <a class="signout" href="landing.html">Signout</a>
-  </div>
+    
+    <h1 id="logo"> Study With Me </h1>
+    
+    <form >
+    
+        <div class="navibar">
+        
+            <a class="home" href="home.jsp">Home</a>
+            <a class="profile" href="profile.jsp">Profile</a>
+            <a class="post" href="post.jsp">Post</a>
+            <a class="post" href="mygroup.jsp">MyGroup</a>
+            <a class="post" href="groupsearch.jsp">GroupSearch</a> 
+            <a class="signout" href="landing.html">Signout</a>
+            
+        </div>
        
-  </form>
+   </form>
   
    <form action="post" method="post"> 
+   
     <h2>Create 'Study With Me' Group</h2>
   
     <label>Group Name: </label>

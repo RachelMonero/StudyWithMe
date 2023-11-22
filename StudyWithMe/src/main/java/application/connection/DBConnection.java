@@ -17,7 +17,7 @@ public class DBConnection {
         
         try {
         	Class.forName("com.mysql.jdbc.Driver");
-        	System.out.println("MySQL JDBC Driver is registered");
+        	
         	
         	connection= DriverManager.getConnection(connString, dbUser, dbPassword);
         } catch(ClassNotFoundException e) {
@@ -29,7 +29,7 @@ public class DBConnection {
         	e.printStackTrace();
         }
         if(connection != null){
-        	System.out.println("Successfully Connected.");
+        	
         } 
         return connection;
    }
