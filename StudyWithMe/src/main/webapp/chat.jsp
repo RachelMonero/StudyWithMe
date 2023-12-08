@@ -11,7 +11,7 @@
 </head>
 <body>
 
-    <p><b><a id="home" href="home.jsp">Back</a></b></p> 
+    <p><b><a id="home" href="mygroup.jsp">Back</a></b></p> 
     
     
 <h2> Chat Messages for Group Name: ${sessionScope.groupName}</h2><br>
