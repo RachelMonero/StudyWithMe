@@ -75,7 +75,7 @@ public class ChatDAO {
 		List<Chat> chatMessages = new ArrayList<>();
 		try {
 			Connection conn = DBConnection.getConnectionToDatabase();
-			String query = "SELECT * FROM chats WHERE groupId =?";
+			String query = "SELECT * FROM chats WHERE groupId =? ORDER BY timeDateStamp";
 			PreparedStatement stmt = conn.prepareStatement(query);
 			stmt.setString(1, groupId);
 			ResultSet resultSet = stmt.executeQuery();
